@@ -1,3 +1,5 @@
+Part 2 README:
+
 Project Summary: 
 This program is a simplified version of a social media app designed to connect high school athletes with other high school athletes, mainly by giving users access to lists of users who do similar sports to them, as well as people who go to the same school and live in the same city. This program has a lot of functions that go towards the functionality of a social media app, such as adding a new user, connecting with other users, and posting to a certain users account. The main Runner.cpp file outputs an extensive menu to choose from in order to use each method for program.
 
