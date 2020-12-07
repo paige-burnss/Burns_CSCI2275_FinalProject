@@ -114,6 +114,7 @@ class Graph
         void removeSport(std::string username, std::string sport);
         void addSport(std::string username, std::string sport);
         void searchForUser(std::string first, std::string last);
+        void printNumConnections(std::username);
         void createConnection(std::string username1, std::string username2);
         void deleteConnection(std::string username1, std::string username2);
         void getUserConnections(std::string username);
