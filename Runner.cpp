@@ -34,16 +34,17 @@ int main(int argc, const char * argv[]) {
                     "9. Update athlete's profile - add a sport\n"
                     "10. Update athlete's profile - remove a sport\n"
                     "11. Search for user with name\n"
-                    "12. Create connection between two users\n"
-                    "13. Delete connection between two users\n"
-                    "14. Get users connections\n"
-                    "15. Get users secondary connections\n"
-                    "16. Get recommendations for a user\n"
-                    "17. Add a new post to an athlete's profile\n"
+                    "12. See the number of connections a user has\n"
+                    "13. Create connection between two users\n"
+                    "14. Delete connection between two users\n"
+                    "15. Get users connections\n"
+                    "16. Get users secondary connections\n"
+                    "17. Get recommendations for a user\n"
+                    "18. Add a new post to an athlete's profile\n"
                     "18. Delete a post from an athlete's profile\n"
-                    "19. Edit a post on an athlete's profile\n"
-                    "20. Display all the posts on an athlete's profile\n"
-                    "21. Quit\n";
+                    "20. Edit a post on an athlete's profile\n"
+                    "21. Display all the posts on an athlete's profile\n"
+                    "22. Quit\n";
 
     int choice = 0;
     bool done = false;
@@ -417,7 +418,23 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 12: {
+            case 12:{
+                cout << "Enter the username you would like to get the number of connections for: ";
+                string username;
+                getline(cin, username);
+                if(g.checkUsernameReal(username) == false){
+                    do{
+                        cout << "That is not a username currently in our database. Please enter a valid username: ";
+                        getline(cin, username);
+                    }
+                    while(g.checkUsernameReal(username) == false);
+                }
+                
+                g.printNumConnections(username);
+                break;
+            }
+
+            case 13: {
                 cout << "Enter the first username of the pair you want to connect: ";
                 string username;
                 getline(cin, username);
@@ -451,7 +468,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 13: {
+            case 14: {
                 cout << "Enter the first username of the pair you want to remove a connection between: ";
                 string username;
                 getline(cin, username);
@@ -484,7 +501,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 14: {
+            case 15: {
                 cout << "Enter the username you would like to see the connections of: ";
                 string username;
                 getline(cin, username);
@@ -500,7 +517,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 15: {
+            case 16: {
                 cout << "Enter the username you would like to see the secondary connections of: ";
                 string username;
                 getline(cin, username);
@@ -516,7 +533,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 16: {
+            case 17: {
                 cout << "Enter the username you would like to see the recommendations for: ";
                 string username;
                 getline(cin, username);
@@ -532,7 +549,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 17: {
+            case 18: {
                 cout << "Enter the username you would like to add a post to: ";
                 string username;
                 getline(cin, username);
@@ -597,7 +614,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 18: {
+            case 19: {
                 cout << "Enter the username you would like to delete a post for: ";
                 string username;
                 getline(cin, username);
@@ -647,7 +664,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 19: {
+            case 20: {
                 cout << "Enter the username you would like to edit of post for: ";
                 string username;
                 getline(cin, username);
@@ -701,7 +718,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 20: {
+            case 21: {
                 cout << "Enter the username you would like to see all the posts of: ";
                 string username;
                 getline(cin, username);
@@ -717,7 +734,7 @@ int main(int argc, const char * argv[]) {
                 break;
             }
 
-            case 21: default: {
+            case 22: default: {
                 done = true;
                 break;
             }
