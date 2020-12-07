@@ -348,6 +348,11 @@ using namespace std;
         }
     };
 
+    void Graph::printNumConnections(std::string username){
+        user *person = findUser2(username);
+        std::cout << "Number of Connections: " << person->numConnections << std::endl;
+    };
+
     void Graph::createConnection(std::string username1, std::string username2){
         for(int i = 0; i < users.size(); i++){
             if(users[i].username == username1){
