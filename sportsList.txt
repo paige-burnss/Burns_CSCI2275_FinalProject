@@ -1,0 +1,36 @@
+Archery
+Badminton
+Baseball
+Softball
+Basketball
+Boxing
+Cycling
+Diving
+Equestrian
+Fencing
+Football
+Golf
+Gymnastics
+Hockey
+Judo
+Lacrosse
+Mixed Martial Arts
+Parkour
+Rugby
+Sailing
+Snowboarding
+Soccer
+Skiing
+Surfing
+Swimming
+Table Tennis
+Taekwondo
+Tennis
+Track
+Ultimate Frisbee
+Volleyball
+Waterskiing
+Wakeboarding
+Weightlifting
+Wrestling
+Yoga
