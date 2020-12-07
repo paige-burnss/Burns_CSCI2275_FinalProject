@@ -41,6 +41,9 @@ How to Run:
     Update athlete's profile - remove a sport
         Removes a sport from a user’s profile (only allowed to do that if there will still be one sport on the profile after removed)
         
+    See the number of connections a user has
+        Prints out the number of connections (sort of like followers or friends) a user has
+        
     Search for user with name
         Prints out a user’s profile from a name you input
         
@@ -85,5 +88,4 @@ Team Members:
     I worked individually on this project.
 
 Open Issues/Bugs: 
-    The methods where the athletes of a certain sport,  a certain sports and city, and a certain sport and school are not working. It seems like the athletes are not being added to the vectors that store this information in the first place.
     The methods that incorporate the linked list for the post do not save the posts to profiles yet, but I believe this has to do with my incorporation of the Linked List class in my Runner and Graph classes.
