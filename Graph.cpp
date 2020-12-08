@@ -105,7 +105,7 @@ using namespace std;
                 getline(lineStream, word, ',');
                 weight = stoi(word);
 
-                if(weight != -1 && weight != 0){
+                if(weight != 2 && weight != 0){
                     createConnection(username1, users[i].username);
                 }
             }
