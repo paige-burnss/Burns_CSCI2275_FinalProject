@@ -23,6 +23,7 @@ struct school{
     
     school(){
         name = "";
+        location = "";
     }
 };
 
@@ -51,7 +52,7 @@ struct user{
     bool checked;
     int numConnections;
     std::vector <adjacent> adj;
-    LinkedList posts;
+    LinkedList *posts;
     
     user(){
         username = "";
@@ -65,7 +66,8 @@ struct user{
         }
         checked = false;
         numConnections = 0;
-        posts.head = nullptr;
+        posts = new LinkedList();
+        posts->head = nullptr;
     }
 
     user(std::string username1, std::string first, std::string last, int age1, std::string city1, std::string school1, std::string sport1, std::string sport2, std::string sport3){
@@ -80,7 +82,8 @@ struct user{
         sports[2] = sport3;
         checked = false;
         numConnections = 0;
-        posts.head = nullptr;
+        posts = new LinkedList();
+        posts->head = nullptr;
     }
 };
 
@@ -93,6 +96,7 @@ class Graph
         std::vector <city> cities;
         std::vector <sport> sports;
         std::vector <user> users;
+        std::string removeSpecialCharacters(std::string s);
         void constructCityList(std::string filename);
         void constructSchoolList(std::string filename);
         void constructSportList(std::string filename);
@@ -114,7 +118,7 @@ class Graph
         void removeSport(std::string username, std::string sport);
         void addSport(std::string username, std::string sport);
         void searchForUser(std::string first, std::string last);
-        void printNumConnections(std::username);
+        void printNumConnections(std::string username);
         void createConnection(std::string username1, std::string username2);
         void deleteConnection(std::string username1, std::string username2);
         void getUserConnections(std::string username);
@@ -141,3 +145,4 @@ class Graph
 };
 
 #endif // GRAPH_H
+
