@@ -88,4 +88,4 @@ Team Members:
     I worked individually on this project.
 
 Open Issues/Bugs: 
-    The methods that incorporate the linked list for the post do not save the posts to profiles yet, but I believe this has to do with my incorporation of the Linked List class in my Runner and Graph classes.
+    There are no known issues or bugs with this code.
