@@ -7,7 +7,17 @@
 #include <queue>
 
 using namespace std;
-    
+
+   std::string Graph::removeSpecialCharacters(std::string s){
+        for (int i = 0; i < s.size(); i++) { 
+            if ((s[i] < 'A' || s[i] > 'Z') && (s[i] < 'a' || s[i] > 'z')){ 
+                s.erase(i, 1);
+                i--;
+            }
+        } 
+        return s;
+    };
+   
     void Graph::constructCityList(std::string filename){
         ifstream inFile(filename);
 
@@ -18,6 +28,7 @@ using namespace std;
         while(getline(inFile, line)){
             stringstream ss(line);
             getline(ss, name);
+            name = removeSpecialCharacters(name);
             temp.name = name;
             cities.push_back(temp);
         }
@@ -35,6 +46,8 @@ using namespace std;
             stringstream ss(line);
             getline(ss, name, ',');
             getline(ss, loc);
+            name = removeSpecialCharacters(name);
+            loc = removeSpecialCharacters(loc);
             temp.name = name;
             temp.location = loc;
             schools.push_back(temp);
@@ -51,6 +64,7 @@ using namespace std;
         while(getline(inFile, line)){
             stringstream ss(line);
             getline(ss, name);
+            name = removeSpecialCharacters(name);
             temp.name = name;
             sports.push_back(temp);
         }
@@ -75,18 +89,26 @@ using namespace std;
         while(getline(file, line)){
             stringstream ss(line);
             getline(ss, first, ',');
+            first = removeSpecialCharacters(first);
             getline(ss, last, ',');
+            last = removeSpecialCharacters(last);
             getline(ss, username, ',');
+            username = username.substr(1);
             getline(ss, a1, ',');
             age = stoi(a1);
             getline(ss, city, ',');
+            city = removeSpecialCharacters(city);
             getline(ss, school, ',');
+            school = removeSpecialCharacters(school);
             getline(ss, sport1, ',');
+            sport1 = removeSpecialCharacters(sport1);
             getline(ss, sport2, ',');
+            sport2 = removeSpecialCharacters(sport2);
             if(sport2 == "null"){
                 sport2 = "";
             }
             getline(ss, sport3, ',');
+            sport3 = removeSpecialCharacters(sport3);
             if(sport3 == "null"){
                 sport3 = "";
             }
@@ -164,16 +186,7 @@ using namespace std;
     };
 
     void Graph::addUser(std::string username1, std::string first, std::string last, int age1, std::string city1, std::string school1, bool stillAttending, std::string sport1, std::string sport2, std::string sport3){
-            user person;
-            person.username = username1;
-            person.firstName = first;
-            person.lastName = last;
-            person.age =  age1;
-            person.city = city1;
-            person.school = school1;
-            person.sports[0] = sport1;
-            person.sports[1]= sport2; 
-            person.sports[2] =sport3;
+            user person (username1, first, last, age1, city1, school1, sport1, sport2, sport3);
             users.push_back(person);
             city *temp = findCity2(city1);
             temp->currentResidents.push_back(person);
@@ -391,14 +404,14 @@ using namespace std;
     };
 
     void Graph::getUserConnections(std::string username){
-        user u1 = findUser(username);
+        user *u1 = findUser2(username);
         std::cout << "Connections: " << std::endl;
-        if(u1.adj.size() == 0){
+        if(u1->adj.size() == 0){
             std::cout << "This user currently has no connections" << std::endl;
             return;
         }
-        for(int i = 0; i < u1.adj.size(); i++){
-            std::cout << u1.adj[i].u->firstName << " " << u1.adj[i].u->lastName << " (" << u1.adj[i].u->username << ")" << std::endl;
+        for(int i = 0; i < u1->adj.size(); i++){
+            std::cout << u1->adj[i].u->firstName << " " << u1->adj[i].u->lastName << " (" << u1->adj[i].u->username << ")" << std::endl;
         }
     };
 
@@ -487,34 +500,35 @@ using namespace std;
     };
 
     void Graph::addPost(std::string username, int month, int day, int year, std::string post){
-        user u1 = findUser(username);
-        u1.posts.insert(month, day, year, post);
+        user *u1 = findUser2(username);
+        u1->posts->insert(month, day, year, post);
     };
 
     bool Graph::checkPostDateUsed(std::string username, int month, int day, int year){
-        user u1 = findUser(username);
-        LLNode *temp = u1.posts.head;
+        user *u1 = findUser2(username);
+        LLNode *temp = u1->posts->head;
         while(temp != nullptr){
             if(temp->month == month && temp->day == day && temp->year == year){
                 return true;
             }
+            temp = temp->next;
         }
         return false;
     };
 
     void Graph::deletePost(std::string username, int month, int day, int year){
-        user u1 = findUser(username);
-        u1.posts.remove(month, day, year);
+        user *u1 = findUser2(username);
+        u1->posts->remove(month, day, year);
     };
 
     void Graph::editPost(std::string username, int month, int day, int year, std::string newPost){
-        user u1 = findUser(username);
-        u1.posts.edit(month, day, year, newPost);
+        user *u1 = findUser2(username);
+        u1->posts->edit(month, day, year, newPost);
     };
 
     void Graph::getAllUserPosts(std::string username){
-        user u1 = findUser(username);
-        u1.posts.printLinkedList();
+        user *u1 = findUser2(username);
+        u1->posts->printLinkedList();
     };
 
     user Graph::findUser(std::string username){
@@ -558,6 +572,7 @@ using namespace std;
                 return temp;
             }
         }
+        std::cout << "city not found" << std::endl;
         return temp;
     }
 
