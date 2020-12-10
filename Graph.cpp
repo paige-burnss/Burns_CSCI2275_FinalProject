@@ -7,16 +7,6 @@
 #include <queue>
 
 using namespace std;
-
-   std::string Graph::removeSpecialCharacters(std::string s){
-        for (int i = 0; i < s.size(); i++) { 
-            if ((s[i] < 'A' || s[i] > 'Z') && (s[i] < 'a' || s[i] > 'z')){ 
-                s.erase(i, 1);
-                i--;
-            }
-        } 
-        return s;
-    };
    
     void Graph::constructCityList(std::string filename){
         ifstream inFile(filename);
@@ -28,7 +18,6 @@ using namespace std;
         while(getline(inFile, line)){
             stringstream ss(line);
             getline(ss, name);
-            name = removeSpecialCharacters(name);
             temp.name = name;
             cities.push_back(temp);
         }
@@ -46,8 +35,6 @@ using namespace std;
             stringstream ss(line);
             getline(ss, name, ',');
             getline(ss, loc);
-            name = removeSpecialCharacters(name);
-            loc = removeSpecialCharacters(loc);
             temp.name = name;
             temp.location = loc;
             schools.push_back(temp);
@@ -64,7 +51,6 @@ using namespace std;
         while(getline(inFile, line)){
             stringstream ss(line);
             getline(ss, name);
-            name = removeSpecialCharacters(name);
             temp.name = name;
             sports.push_back(temp);
         }
@@ -89,26 +75,18 @@ using namespace std;
         while(getline(file, line)){
             stringstream ss(line);
             getline(ss, first, ',');
-            first = removeSpecialCharacters(first);
             getline(ss, last, ',');
-            last = removeSpecialCharacters(last);
             getline(ss, username, ',');
-            username = username.substr(1);
             getline(ss, a1, ',');
             age = stoi(a1);
             getline(ss, city, ',');
-            city = removeSpecialCharacters(city);
             getline(ss, school, ',');
-            school = removeSpecialCharacters(school);
             getline(ss, sport1, ',');
-            sport1 = removeSpecialCharacters(sport1);
             getline(ss, sport2, ',');
-            sport2 = removeSpecialCharacters(sport2);
             if(sport2 == "null"){
                 sport2 = "";
             }
             getline(ss, sport3, ',');
-            sport3 = removeSpecialCharacters(sport3);
             if(sport3 == "null"){
                 sport3 = "";
             }
@@ -383,20 +361,18 @@ using namespace std;
     };
 
     void Graph::deleteConnection(std::string username1, std::string username2){
-        user u1 = findUser(username1);
-        user u2 = findUser(username2);
-        for(int i = 0; i < u1.adj.size(); i++){
-            if(u1.adj[i].u->username == u2.username){
-                std::cout << i << std::endl;
-                u1.adj.erase(u1.adj.begin() + i);
-                for(int x = 0; x < u2.adj.size(); x++){
-                    if(u2.adj[x].u->username == u1.username){
-                        std::cout << x << std::endl;
-                        u2.adj.erase(u2.adj.begin() + x);
+        user *u1 = findUser2(username1);
+        user *u2 = findUser2(username2);
+        for(int i = 0; i < u1->adj.size(); i++){
+            if(u1->adj[i].u->username == u2->username){
+                u1->adj.erase(u1->adj.begin()+i);
+                for(int x = 0; x < u2->adj.size(); x++){
+                    if(u2->adj[x].u->username == u1->username){
+                        u2->adj.erase(u2->adj.begin()+x);
                     }
                 }
-                u1.numConnections--;
-                u2.numConnections--;
+                u1->numConnections--;
+                u2->numConnections--;
                 return;
             }
         }
@@ -553,17 +529,6 @@ using namespace std;
         return temp;
     }
 
-    city Graph::findCity(std::string name){
-        city temp;
-        for(int i = 0; i < cities.size(); i++){
-            if(cities[i].name == name){
-                temp = cities[i];
-                return temp;
-            }
-        }
-        return temp;
-    };
-
     city *Graph::findCity2(std::string name){
         city *temp = nullptr;
         for(int i = 0; i < cities.size(); i++){
@@ -576,17 +541,6 @@ using namespace std;
         return temp;
     }
 
-    school Graph::findSchool(std::string name){
-        school temp;
-        for(int i = 0; i < schools.size(); i++){
-            if(schools[i].name == name){
-                temp = schools[i];
-                return temp;
-            }
-        }
-        return temp;
-    };
-
     school *Graph::findSchool2(std::string name){
         school *temp = nullptr;
         for(int i = 0; i < schools.size(); i++){
@@ -595,17 +549,6 @@ using namespace std;
         }
         return temp;
     }
-
-    sport Graph::findSport(std::string name){
-        sport temp;
-        for(int i = 0; i < sports.size(); i++){
-            if(sports[i].name == name){
-                temp = sports[i];
-                return temp;
-            }
-        }
-        return temp;
-    };
 
     sport *Graph::findSport2(std::string name){
         sport * temp = nullptr;
