@@ -96,7 +96,6 @@ class Graph
         std::vector <city> cities;
         std::vector <sport> sports;
         std::vector <user> users;
-        std::string removeSpecialCharacters(std::string s);
         void constructCityList(std::string filename);
         void constructSchoolList(std::string filename);
         void constructSportList(std::string filename);
@@ -134,15 +133,11 @@ class Graph
     private:
         user findUser(std::string username);
         user *findUser2(std::string username);
-        city findCity(std::string name);
         city * findCity2(std::string name);
-        school findSchool(std::string name);
         school *findSchool2(std::string name);
-        sport findSport(std::string name);
         sport *findSport2(std::string name);
         bool contains(std::vector<user*> users1, std::string username);
         bool contains2(std::vector<adjacent> users1, std::string username);
 };
 
 #endif // GRAPH_H
-
