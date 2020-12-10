@@ -17,15 +17,36 @@ using namespace std;
                 head = node;
                 return;
             }
-            if(head->year <= year && head->month <= month && head->day < day){
-                node->next = head;
-                head->prev = node;
-                head = node;
-                return;
+            if(head->year <= year && head->month <= month){
+                if((head->month == month && head->day < day) || head->month < month){
+                    node->next = head;
+                    head->prev = node;
+                    head = node;
+                    return;
+                }
             }
             LLNode *temp = head;
-            while(temp->next != nullptr && temp->year >= year && temp->month >= month && temp->day > day){
+            while(temp->next != nullptr && temp->year >= year){
                 temp = temp->next;
+            }
+            while(temp->next != nullptr && temp->month >= month){
+                temp = temp->next;
+            }
+            while(temp->next != nullptr && temp->day > day){
+                temp = temp->next;
+            }
+            if(temp->next == nullptr && temp->year >= year){
+                if(temp->year > year){
+                    std::cout << "got here" << std::endl;
+                    temp->next = node;
+                    node->prev = temp;
+                    return;
+                }
+                if((temp->month == month && temp->day > day)|| temp->month > month) {
+                    temp->next = node;
+                    node->prev = temp;
+                    return;
+                }
             }
             temp->prev->next = node;
             node->prev = temp->prev;
@@ -69,12 +90,23 @@ using namespace std;
             while(temp != nullptr){
                 std::cout << "Date Posted: " << temp->month << "/" << temp->day << "/" << temp->year << std::endl;
                 std::cout << temp->post << std::endl;
+                temp = temp->next;
             }
         };
 
         LLNode* LinkedList::findNode(int month, int day, int year){
             LLNode *temp = head;
-            while(temp != nullptr && temp->year != year && temp->month != month && temp->day != day){
+            while(temp != nullptr && temp->year != year){
+                std::cout << temp->year << std::endl;
+                temp = temp->next;
+            }
+            while(temp != nullptr && temp->month != month){
+                std::cout << temp->month << std::endl;
+                temp = temp->next;
+            }
+            std::cout << "got here" << std::endl;
+            while(temp != nullptr && temp->day != day){
+                std::cout << temp->day << std::endl;
                 temp = temp->next;
             }
             if(temp == nullptr){
