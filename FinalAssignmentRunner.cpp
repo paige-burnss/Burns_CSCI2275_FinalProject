@@ -19,7 +19,7 @@ int main(int argc, const char * argv[]) {
     g.constructSportList(sportsFilename);
     std::string usersFilename = argv[4];
     std::string connectFilename = argv[5];
-    g.generateGraph( usersFilename, connectFilename);
+    g.generateGraph(usersFilename, connectFilename);
 
 
     string dmenu =  "======Main Menu======\n"
@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
                     "16. Get users secondary connections\n"
                     "17. Get recommendations for a user\n"
                     "18. Add a new post to an athlete's profile\n"
-                    "18. Delete a post from an athlete's profile\n"
+                    "19. Delete a post from an athlete's profile\n"
                     "20. Edit a post on an athlete's profile\n"
                     "21. Display all the posts on an athlete's profile\n"
                     "22. Quit\n";
@@ -565,16 +565,64 @@ int main(int argc, const char * argv[]) {
                 string m;
                 getline(cin, m);
                 int month = stoi(m);
+                if(month > 12 || month < 1){
+                    do{
+                        cout << "This is not a valid month. Please enter a valid month: ";
+                        getline(cin, m);
+                        month = stoi(m);
+                    }
+                    while(month > 12 || month < 1);
+                }
 
+                string a;
                 cout << "Enter the current day: ";
                 string d;
                 getline(cin, d);
                 int day = stoi(d);
+                if(month == 2 && (day > 28 || day <1)){
+                    do{
+                        if(day == 29){
+                            cout << "Is today Leap Day? (YES of NO): ";
+                            getline(cin, a);
+                        }
+                        else{
+                            cout << "This is not a valid day in this month. Please enter a valid day: ";
+                            getline(cin, d);
+                            day = stoi(d);
+                        }
+                    }
+                    while((day > 28 || day <1) || a != "YES");
+                }
+                else if(month != 1 && month != 3 && month != 5 && month !=7 && month != 8 && month != 10 && month !=12 && (day > 30 || day <1)){
+                    do{
+                        cout << "This is not a valid day in this month. Please enter a valid day: ";
+                        getline(cin, d);
+                        day = stoi(d);
+                    }
+                    while(day > 30 || day <1);
+                }
+                else if(day > 31 || day < 1){
+                    do{
+                        cout << "This is not a valid day in this month. Please enter a valid day: ";
+                        getline(cin, d);
+                        day = stoi(d);
+                    }
+                    while(day > 31 || day < 1);
+                }
 
                 cout << "Enter the current year: ";
                 string y;
                 getline(cin, y);
                 int year = stoi(y); 
+                if(year > 2020 || year < 2010){
+                    do{
+                        cout << "This is not a valid year because this app was made in 2010 and the year is currently 2020." << endl;
+                        cout << "Please enter a valid year: ";
+                        getline(cin, y);
+                        year = stoi(y);
+                    }
+                    while(year > 2020 || year < 2010);
+                }
 
                 string answer;
                 if(g.checkPostDateUsed(username, month, day, year) == true){
@@ -590,14 +638,62 @@ int main(int argc, const char * argv[]) {
                             cout << "Enter the current month: ";
                             getline(cin, m);
                             month = stoi(m);
+                            if(month > 12 || month < 1){
+                                do{
+                                    cout << "This is not a valid month. Please enter a valid month: ";
+                                    getline(cin, m);
+                                    month = stoi(m);
+                                }
+                                while(month > 12 || month < 1);
+                            }
 
+                            string a;
                             cout << "Enter the current day: ";
                             getline(cin, d);
                             day = stoi(d);
+                            if(month == 2 && (day > 28 || day <1)){
+                                do{
+                                    if(day == 29){
+                                        cout << "Is today Leap Day? (YES of NO): ";
+                                        getline(cin, a);
+                                    }
+                                    else{
+                                        cout << "This is not a valid day in this month. Please enter a valid day: ";
+                                        getline(cin, d);
+                                        day = stoi(d);
+                                    }
+                                }
+                                while((day > 28 || day <1) || a != "YES");
+                            }
+                            else if(month != 1 && month != 3 && month != 5 && month !=7 && month != 8 && month != 10 && month !=12 && (day > 30 || day <1)){
+                                do{
+                                    cout << "This is not a valid day in this month. Please enter a valid day: ";
+                                    getline(cin, d);
+                                    day = stoi(d);
+                                }
+                                while(day > 30 || day <1);
+                            }
+                            else if(day > 31 || day < 1){
+                                do{
+                                    cout << "This is not a valid day in this month. Please enter a valid day: ";
+                                    getline(cin, d);
+                                    day = stoi(d);
+                                }
+                                while(day > 31 || day < 1);
+                            }
 
                             cout << "Enter the current year: ";
                             getline(cin, y);
                             year = stoi(y); 
+                            if(year > 2020 || year < 2010){
+                                do{
+                                    cout << "This is not a valid year because this app was made in 2010 and the year is currently 2020." << endl;
+                                    cout << "Please enter a valid year: ";
+                                    getline(cin, y);
+                                    year = stoi(y);
+                                }
+                                while(year > 2020 || year < 2010);
+                            }
                         }
                     }
                     while(g.checkPostDateUsed(username, month, day, year) == true);
