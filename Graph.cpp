@@ -9,6 +9,7 @@
 using namespace std;
    
     void Graph::constructCityList(std::string filename){
+       //creates a vector of all the cities stored in the coloradoCities.txt file to be referenced later
         ifstream inFile(filename);
 
         string name = "";
@@ -24,6 +25,7 @@ using namespace std;
     };
 
     void Graph::constructSchoolList(std::string filename){
+       //creates a vector of all the schools stored in the coloradoHighSchools.txt file to be referenced later
         ifstream inFile(filename);
 
         string name = "";
@@ -42,6 +44,7 @@ using namespace std;
     };
 
     void Graph::constructSportList(std::string filename){
+       //creates a vector of a number of popular sports stored in the sportsNames.txt file to be referenced later
         ifstream inFile(filename);
 
         string name = "";
@@ -57,6 +60,7 @@ using namespace std;
     };
 
     void Graph::generateGraph(std::string filename, std::string filename2) {
+       //builds an initial graph with 21 different users and mulitple connections to be build on later in the program
         ifstream file(filename);
         ifstream file2(filename2);
 
@@ -92,6 +96,7 @@ using namespace std;
             }
             addUser(username, first, last, age, city, school, true, sport1, sport2, sport3);
         }
+       //adds all the user vertices into the graph
 
         std::string username1;
         std::string word;
@@ -110,19 +115,23 @@ using namespace std;
                 }
             }
         }
+       //adds all the user connections into the graph
     };
 
     bool Graph::checkUserNameUnique(std::string username){
-        for(int i=0; i < users.size(); i++){
+       //when a new user is being added, this function checks if a username has already been used because all usernames must be unique for this program 
+       for(int i=0; i < users.size(); i++){
             if(users[i].username == username){
                 return false;
             }
         }
+       //for loop to run through all of the user vertices in the graph
         return true;
     }
 
     bool Graph::checkCityReal(std::string city){
-        for(int i = 0; i < cities.size(); i++){
+       //checks if a city that is being inputted into this program in the runner is a valid city in colorado or not 
+       for(int i = 0; i < cities.size(); i++){
             if(cities[i].name == city){
                 return true;
             }
@@ -131,7 +140,8 @@ using namespace std;
     }
 
     bool Graph::checkSchoolReal(std::string school){
-        for(int i = 0; i < schools.size(); i++){
+       //checks if a school that is being inputted into this program in the runner is a valid high school in colorado or not  
+       for(int i = 0; i < schools.size(); i++){
             if(schools[i].name == school){
                 return true;
             }
@@ -140,6 +150,8 @@ using namespace std;
     };
 
     bool Graph::checkSportInclusion(std::string sport){
+       //checks if an sport that is being inputted into this program in the runner is included in the sports list 
+       //if false, the runner states that they cannot use the social media program with that sport because it is relatively uncommon and they won't be able to make connections
         for(int i = 0; i < sports.size(); i++){
             if(sports[i].name == sport){
                 return true;
@@ -149,6 +161,7 @@ using namespace std;
     };
 
     bool Graph::checkUsernameReal(std::string username){
+       //checks if the username inputted in the runner is a valid username that is a part of the graph
         for(int i = 0; i < users.size(); i++){
             if(users[i].username == username){
                 return true;
@@ -157,17 +170,15 @@ using namespace std;
         return false;
     };
 
-    void Graph::uncheck() {
-        for (int i = 0; i < users.size(); i++) {
-            users[i].checked = false;
-        }
-    };
-
     void Graph::addUser(std::string username1, std::string first, std::string last, int age1, std::string city1, std::string school1, bool stillAttending, std::string sport1, std::string sport2, std::string sport3){
-            user person (username1, first, last, age1, city1, school1, sport1, sport2, sport3);
+       //adds a new user vertice to the graph     
+       user person (username1, first, last, age1, city1, school1, sport1, sport2, sport3);
+       //creates a new user object
             users.push_back(person);
+       //adds that user to the graph's user vertices vector
             city *temp = findCity2(city1);
             temp->currentResidents.push_back(person);
+       //finds the city the user currently lives in and adds them to the current Residents vector for that city
             
             school *temp2 = findSchool2(school1);
             if(stillAttending == true){
@@ -176,6 +187,7 @@ using namespace std;
             else{
                 temp2->pastStudents.push_back(person);
             }
+       //finds the school the user currently or last attended and adds them to either the current students or past students vector for that specific school
 
             sport *spo1 = findSport2(sport1);
             spo1->athletes.push_back(person);
@@ -187,60 +199,83 @@ using namespace std;
                     spo3->athletes.push_back(person);
                 }
             }
+       //finds each sport the user inputted as participating in and adds the user to each sports atheltes vector
     };
 
     void Graph::printSportAthletes(std::string sport1){
-        std::cout << sport1 << " Athletes: " << std::endl;
+       //prints out all of the users that currently have the inputted sport on their profile 
+       std::cout << sport1 << " Athletes: " << std::endl;
         sport *temp = findSport2(sport1);
+       //finds the sport out of the sport vector constructed from the sports list created at the beginning of the program
         for(int x = 0; x < temp->athletes.size(); x++){
             std::cout << temp->athletes[x].firstName << " " << temp->athletes[x].lastName << ": " << temp->athletes[x].username << std::endl;
         }
+       //using the specific sports' atheletes vector, the for loop loops through the vector and prints out each current user's name and username
     };
 
     void Graph::printCityAthletes(std::string city1, std::string sport){
-        std::cout << city1 << " Athletes in " << sport << ": " << std::endl;
+       //prints out all of the users that currently live in a certain city and have the inputted sport on their profile 
+       std::cout << city1 << " Athletes in " << sport << ": " << std::endl;
         city *temp = findCity2(city1);
+       //finds the city out of the city vector constructed from the coloradoCities list created at the beginning of the program
         for(int x = 0; x < temp->currentResidents.size(); x++){
             if(temp->currentResidents[x].sports[0] == sport || temp->currentResidents[x].sports[1] == sport || temp->currentResidents[x].sports[2] == sport){
                 std::cout << temp->currentResidents[x].firstName << " " << temp->currentResidents[x].lastName << ": " << temp->currentResidents[x].username << std::endl;
             }
         }
+       //using the specific cities' current residents vector, and checking if each user in that vector does the specified sport inputted into the program, 
+       //the for loop loops through the vector and prints out each current resident of that city and current athlete of that sport's name and username
     };
 
     void Graph::printCurrentSchoolAlthles(std::string school1, std::string sport){
+       //prints out all of the users that currenlty go to a certain school and have the inputted sport on their profile
         school *temp = findSchool2(school1);
+       //finds the schools out of the school vector constructed from the coloradoHigh Schools list created at the beginning of the program
         std::cout << school1 << "(" << temp->location << ")" << " Current Athletes in " << sport << ": " << std::endl;
         for(int x = 0; x < temp->currentStudents.size(); x++){
             if(temp->currentStudents[x].sports[0] == sport || temp->currentStudents[x].sports[1] == sport || temp->currentStudents[x].sports[2] == sport){
                 std::cout << temp->currentStudents[x].firstName << " " << temp->currentStudents[x].lastName << ": " << temp->currentStudents[x].username << std::endl;
             }
         }
+       //using the specific schools' current students vector, and checking if each user in that vector does the specified sport inputted into the program, 
+       //the for loop loops through the vector and prints out each current student of that school and current athlete of that sport's name and username
     };
     
     void Graph::printSchoolAthleteAlumni(std::string school1, std::string sport){
+       //prints out all of the users that used to go to a certain school (now alumni of the school) and have the inputted sport on their profile
         school *temp = findSchool2(school1);
+       //finds the schools out of the school vector constructed from the coloradoHigh Schools list created at the beginning of the program
         std::cout << school1 << "(" << temp->location << ")" << " Past Athletes in " << sport << ": " << std::endl;
         for(int x = 0; x < temp->pastStudents.size(); x++){
             if(temp->pastStudents[x].sports[0] == sport || temp->pastStudents[x].sports[1] == sport || temp->pastStudents[x].sports[2] == sport){
                 std::cout << temp->pastStudents[x].firstName << " " << temp->pastStudents[x].lastName << ": " << temp->pastStudents[x].username << std::endl;
             }
         }
+       //using the specific schools' past students vector, and checking if each user in that vector does the specified sport inputted into the program, 
+       //the for loop loops through the vector and prints out each past student of that school and current athlete of that sport's name and username
     };
 
     void Graph::updateCity(std::string username, std::string city1){
+       //updates the city that is currently stored in a user's profile
         user *person = findUser2(username);
+       //finds specific user that wants to edit their city
         city *temp = findCity2(person->city);
+       //finds the city the user currently has on their profile
         for(int i = 0; i < temp->currentResidents.size(); i++){
             if(temp->currentResidents[i].username == person->username){
                 temp->currentResidents.erase(temp->currentResidents.begin() + i);
             }
         }
+       //using the city found above, a for loop goes through all of the users stored in that city's currentResidents list until the specified user is found and removed from the current residents vector of that city
         person->city = city1;
+       //the city on the specified user's profile is updated to the new inputted city
         city *temp2 = findCity2(city1);
         temp2->currentResidents.push_back(*person);
+       //the new inputted city is found in the cities vector, and the user is added to the currentResidents vector of the new inputted city
     };
 
     void Graph::updateSchool(std::string username, std::string school1){
+       //updates the school that is currently stoed in a user's profile
         user *person = findUser2(username);
         school *temp = findSchool2(person->school);
         for(int x = 0; x < temp->currentStudents.size(); x++){
