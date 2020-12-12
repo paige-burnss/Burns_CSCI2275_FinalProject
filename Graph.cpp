@@ -593,7 +593,9 @@ using namespace std;
     };
 
     bool Graph::checkPostDateUsed(std::string username, int month, int day, int year){
-        user *u1 = findUser2(username);
+       //checks if the date of a post that is desired to be posted has already been used(users only allowed to make one post per day) 
+       user *u1 = findUser2(username);
+       //finds specified user that would like to check if the date was already posted on
         LLNode *temp = u1->posts->head;
         while(temp != nullptr){
             if(temp->month == month && temp->day == day && temp->year == year){
@@ -601,92 +603,120 @@ using namespace std;
             }
             temp = temp->next;
         }
+       //runs through the entire linked list of the user's posts, and if the date specified in the input matches the date of one of the posts, the funciton returns true
         return false;
     };
 
     void Graph::deletePost(std::string username, int month, int day, int year){
-        user *u1 = findUser2(username);
+       //deletes a post from a user's profile 
+       user *u1 = findUser2(username);
+       //finds specified user that would like to delete a post from their profile
         u1->posts->remove(month, day, year);
+       //uses Linked List class to delete a post from the user's linked list of posts
     };
 
     void Graph::editPost(std::string username, int month, int day, int year, std::string newPost){
-        user *u1 = findUser2(username);
+       //edits a post on a user's profile 
+       user *u1 = findUser2(username);
+       //finds specified user that would like to edit a post from their profile
         u1->posts->edit(month, day, year, newPost);
+       //uses Linked List class to edit a post from the user's linked list of posts
     };
 
     void Graph::getAllUserPosts(std::string username){
-        user *u1 = findUser2(username);
+       //prints out all of a user's posts on their profile 
+       user *u1 = findUser2(username);
+       //finds specified user that would like to print out all their posts
         u1->posts->printLinkedList();
+       //uses Linked List class to print out the posts from a user's linked list of posts
     };
 
     user Graph::findUser(std::string username){
-        user temp;
+       //finds a user in the graph from an inputted username and returns the actual user(not a pointer) 
+       user temp;
+       //create new user object
         for(int i = 0; i < users.size(); i++){
             if(users[i].username == username){
                 temp = users[i];
                 return temp;
             }
         }
+       //loops through all the verticies in the graph. if the username of the current for loop user is the same as the specified username, temp is set to that user and is returned 
         return temp;
     };
 
     user *Graph::findUser2(std::string username){
-        user *temp = nullptr;
+       //finds a user in the graph from an inputted username but returns a pointer(not actual user) 
+       user *temp = nullptr;
+       //create new user pointer
         for(int i = 0; i < users.size(); i++){
             if(users[i].username == username){
                 temp = &users[i];
                 return temp;
             }
         }
+       //loops through all the verticies in the graph. if the username of the current for loop user is the same as the specified username, temp is set to that user and is returned 
         return temp;
     }
 
     city *Graph::findCity2(std::string name){
-        city *temp = nullptr;
+       //finds a city in the graph from an inputted city name but returns a pointer(not actual user) 
+       city *temp = nullptr;
+       //create new city pointer
         for(int i = 0; i < cities.size(); i++){
             if(cities[i].name == name){
                 temp = &cities[i];
                 return temp;
             }
         }
-        std::cout << "city not found" << std::endl;
+       //loops through all the cities in the graph. if the name of the current for loop city is the same as the specified city name, temp is set to that city and is returned
         return temp;
     }
 
     school *Graph::findSchool2(std::string name){
-        school *temp = nullptr;
+       //finds a school in the graph from an inputted school name but returns a pointer(not actual user)  
+       school *temp = nullptr;
+       //creates a new school pointer
         for(int i = 0; i < schools.size(); i++){
             temp = &schools[i];
             return temp;
         }
+       //loops through all the schools in the graph. if the name of the current for loop school is the same as the specified school name, temp is set to that school and is returned
         return temp;
     }
 
     sport *Graph::findSport2(std::string name){
-        sport * temp = nullptr;
+       //finds a sport in the graph from an inputted sport name but returns a pointer(not actual user)  
+       sport * temp = nullptr;
+       //creates a new sport pointer
         for(int i = 0; i < sports.size(); i++){
             if(sports[i].name == name){
                 temp = &sports[i];
                 return temp;
             }
         }
+       //loops through all the sports in the graph. if the name of the current for loop sport is the same as the specified sport name, temp is set to that sport and is returned
         return temp;
     }
 
     bool Graph::contains(vector<user*> users1, std::string username){
-        for(int i = 0; i < users1.size(); i++){
+       //checks if a specified username is included in a vector full of user pointers (used in user recomendation and secondary user connection functions) 
+       for(int i = 0; i < users1.size(); i++){
             if(users1[i]->username == username){
                 return true;
             }
         }
+       //loops through the entire vector inputted, and if a username matches the specified username, the function returns true
         return false;
     };
 
     bool Graph::contains2(vector<adjacent> users1, std::string username){
-        for(int i = 0; i < users1.size(); i++){
+       //checks if a specified username is included in a vector full of adjacent items (used in user recomendation and secondary user connection functions)  
+       for(int i = 0; i < users1.size(); i++){
             if(users1[i].u->username == username){
                 return true;
             }
         }
+       //loops through the entire vector inputted, and if a username matches the specified username, the function returns true
         return false;
     };
