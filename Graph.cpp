@@ -275,92 +275,124 @@ using namespace std;
     };
 
     void Graph::updateSchool(std::string username, std::string school1){
-       //updates the school that is currently stoed in a user's profile
+       //updates the school that is currently stored in a user's profile
         user *person = findUser2(username);
+       //finds speciic user that wants to edit their school
         school *temp = findSchool2(person->school);
+       //finds the school the user currently has on their profile
         for(int x = 0; x < temp->currentStudents.size(); x++){
             if(temp->currentStudents[x].username == person->username){
                 temp->currentStudents.erase(temp->currentStudents.begin() + x);
             }
         }
-        temp->currentStudents.push_back(*person);
+       //using the school found above, a for loop goes through all the users stored in that school's current Students lsit until the specified user is found and removed from the current Students vector of that school 
+        temp->pastStudents.push_back(*person);
+       //the user is added to the current school's past students vector
         person->school = school1;
+       //the school on the specified user's profile is updated to the new inputted school
         school *temp2 = findSchool2(school1);
         temp2->currentStudents.push_back(*person);
+       //the new inputted school is found in the schools vector, and the user is added to the current students vector of the new inputted school
     };
 
     void Graph::updateAge(std::string username, int age1){
+       //updates the age that is currently stored in a user's profile
         user *person = findUser2(username);
+       //finds specific user that wants to edit their age
         person->age = age1;
+       //the age on the specified user's profile is updated to the new inputted age
     };
 
     void Graph::removeSport(std::string username, std::string sport1){
+       //removes a sport from a user's profile (only if a user has a sport left on their profile after this sport is removed)
         user *person = findUser2(username);
+       //finds specific user that wants to remove a sport from their profile
         if(person->sports[0] != sport1 && person->sports[1] != sport1 && person->sports[2] != sport1){
             std::cout << "This user doesn't currently do the sport you want to remove from this profile." << std::endl;
             return;
         }
+       //checks if the person has the specified sport on their profile
         if(person->sports[1] == "" && person->sports[2] == ""){
             std::cout << "This user currently only has one sport on their profile. You cannot remove a sport unless a user will still have one sport on their profile." << std::endl;
             return;
         }
+       //checks if the person would still have one sport left on their profile after they delete the specified sport
         if(person->sports[0] == sport1){
             person->sports[0] = person->sports[1];
             person->sports[1] = person->sports[2];
             person->sports[2] = "";
         }
+       //if the desired sport to be removed is at the front of the sports array of the user's profile, the other two sports are moved up a position in the array and the last place in the array is left blank
         else if (person->sports[1] == sport1){
             person->sports[1] = person->sports[2];
             person->sports[2] = "";
         }
+       //if the desired sport to be removed is in the second position of the sports array of the user's profile, the other sport is moved up a position in the array and the last place in the array is left blank
         else{
             person->sports[2] = "";
         }
+       //if the desired sport to be removed is in the last position of the sports array of the user's profile, the last position is redefined as an empty string
         sport *temp = findSport2(sport1);
+       //find the sport that was removed from the user's profile
         for(int x = 0; x < temp->athletes.size(); x++){
             if(temp->athletes[x].username == person->username){
                 temp->athletes.erase(temp->athletes.begin() + x);
             }
         }
+       //using the sport found above, a for loop goes through all the users stored in that sport's althetes list until the specified user is found and removed from the athletes vector of that school 
     };
     
     void Graph::addSport(std::string username, std::string sport1){
+       //adds another sport to a user's profile (but only if they don't have a max of 3 sports on their profile already)
         user *person = findUser2(username);
+       //finds specific user that wants to add a sport to their profile
         if(person->sports[2] != ""){
             std::cout << "This user already currently has the max of 3 sports on their profile." << std::endl;
             return;
         }
+       //checks to see if this user has 3 sports on their profile
         if(person->sports[1] == ""){
             person->sports[1] = sport1;
         }
         else{
             person->sports[2] = sport1;
         }
+       //inserts new specified sport in a specific position, depending on how many sports are already in a user's profile
         sport *temp = findSport2(sport1);
+       //finds the specified sport that a user wants to add to their profile
         temp->athletes.push_back(*person);
+       //adds user to the vector holding all of the athletes of the new specified sport
     };
 
     void Graph::searchForUser(std::string first1, std::string last1){
+       //searches for a user using the first and last name of a user
+       //can return multiple different users if they all have the same name
         vector <user> first;
+       //create a new vector of users to add users with the same first name as the specified first name to
         for(int i = 0; i < users.size(); i++){
             if(users[i].firstName == first1){
                 first.push_back(users[i]);
             }
         }
+       //uses for loop to go through all the user vertices in the graph. if a user has the same first name as the specified first name, they are added to the first vector
         if(first.size() == 0){
             std::cout << "There is no user with this name." << std::endl;
             return;
         }
+       //if the size of the first vector is 0, that means there are no users with the specified name, and the function is returned
         vector <user> last;
+       //create a new vecotr of users to add users with the same last name as te specified last name to
         for(int i = 0; i < first.size(); i++){
             if(first[i].lastName == last1){
                 last.push_back(first[i]);
             }
         }
+       //uses for loop to go through all the users in the first vector. if a user with the same first name specified also has the same specified last name, they are added to the last vector
         if(last.size() == 0){
             std::cout << "There is no user with this name." << std::endl;
             return;
         }
+       //if the size of the last vector is 0, that means there are no users with the specified name, and the function is returned
         for(int i = 0; i < last.size(); i++){
             std::cout << last[i].firstName << " " << last[i].lastName << ", " << last[i].username << ", " << last[i].age << ", " << last[i].city << ", " << last[i].school<< std::endl;
             std::cout <<last[i].sports[0];
@@ -372,11 +404,15 @@ using namespace std;
             }
             std::cout << "." << std::endl;
         }
+       //the for loop goes through all the users in the last vector, whichis comprised of users with the same first and last name specified in the inputs, and prints out each user's profile information
     };
 
     void Graph::printNumConnections(std::string username){
+       //finds the number of connections a user has (kind of like followers)
         user *person = findUser2(username);
+       //finds the specified user of which someone would like to see their number of connections
         std::cout << "Number of Connections: " << person->numConnections << std::endl;
+       //prints out the number of connections of the specified user
     };
 
     void Graph::createConnection(std::string username1, std::string username2){
