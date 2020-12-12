@@ -97,12 +97,19 @@ class Graph
         std::vector <sport> sports;
         std::vector <user> users;
         void constructCityList(std::string filename);
+    //makes list of cities that a user can be from to create a profile
         void constructSchoolList(std::string filename);
+    //makes a list of high schools that a user can be attending / have attended to create a profile
         void constructSportList(std::string filename);
+    //makes a list of sports that a user must participate in to have a profile
         void generateGraph(std::string filename, std::string filename2);
+    //generates an intital graph before people using the program can start inputting new users
         bool checkUserNameUnique(std::string username);
+    //checks if a username is unique before creating a profile (all usernames must be unique)
         bool checkCityReal(std::string city);
+    //check if a city entered in a profile is one of the cities included in the vector of cities from the graph
         bool checkSchoolReal(std::string school);
+    //check if a school enterd in a profile is one of the schools insluded in the vector of the schools from the graph
         bool checkSportInclusion(std::string sport);
         bool checkUsernameReal(std::string username);
         void uncheck();
