@@ -416,15 +416,22 @@ using namespace std;
     };
 
     void Graph::createConnection(std::string username1, std::string username2){
-        for(int i = 0; i < users.size(); i++){
+       //creates a connection between one user and another 
+       for(int i = 0; i < users.size(); i++){
+          //loops through all the user vertices in the graph to find the first username
             if(users[i].username == username1){
+               //checks for the usernames of all user vertices to see if they match the specified first username inputted
                 for(int j = 0; j < users.size(); j++){
+                   //loops through all the user vertices in the graph to find the second username 
                     if(users[j].username == username2 && i != j){
+                       //check for the usernames of all user vertices to see if they match the specified second username inputted, and also checks that the first and last username are not stored in the same place (i.e. the usernames are identical and cannot create a connection between them)
                         adjacent temp;
                         temp.u = &users[j];
                         temp.weight = 1;
+                       //creates an adjacent item with the second username
                         users[i].adj.push_back(temp);
                         users[i].numConnections++;
+                       //pushes the new adjacent item into the adjacent vector of the first username and increases the number of connections for the first username
                     }
                 }
             }
@@ -432,54 +439,78 @@ using namespace std;
     };
 
     void Graph::deleteConnection(std::string username1, std::string username2){
-        user *u1 = findUser2(username1);
+       //deletes a connection between two specified users (kind of like unfollowing) 
+       user *u1 = findUser2(username1);
         user *u2 = findUser2(username2);
+       //finds both specified users from the usernames specified in the input
         for(int i = 0; i < u1->adj.size(); i++){
+           //for loop to go through all the adjacent items in the username1 profile
             if(u1->adj[i].u->username == u2->username){
+               //checks if the username of the current adjacent item is the same as the second username
                 u1->adj.erase(u1->adj.begin()+i);
+               //erase the adjacent item with the second username from the adjacent vector of the first username
                 for(int x = 0; x < u2->adj.size(); x++){
+                   //for loop to go through all the adjacent items in the userame2 profile
                     if(u2->adj[x].u->username == u1->username){
+                       //checks if the username of the current adjacent item is the same as the first username
                         u2->adj.erase(u2->adj.begin()+x);
+                       //erase the adjacent item with the first username from the adjacent vector of the second username
                     }
                 }
                 u1->numConnections--;
                 u2->numConnections--;
+               //decreases the number of connections for both users
                 return;
             }
         }
         std::cout << "These two users are not connected." << std::endl;
+       //if the above code isn't executed, it means the users aren't connected
     };
 
     void Graph::getUserConnections(std::string username){
+       //gets all the connections of a certain user
         user *u1 = findUser2(username);
+       //finds the specified user for which someone would like to see the connections of
         std::cout << "Connections: " << std::endl;
         if(u1->adj.size() == 0){
             std::cout << "This user currently has no connections" << std::endl;
             return;
         }
+       //checks if the user has an adjacent vector size of 0, meaning they have no connections
         for(int i = 0; i < u1->adj.size(); i++){
             std::cout << u1->adj[i].u->firstName << " " << u1->adj[i].u->lastName << " (" << u1->adj[i].u->username << ")" << std::endl;
         }
+       //for loop going through each adjacent vector item and printing out each first and last name and username of the connecitons
     };
 
     void Graph::getUserSecondaryConncection(std::string username){
+       //returns a list of users that are connected to the specified user's connections (kind of like friends of friends)
         user u1 = findUser(username);
+       //finds the specified user for which someone would like to see the secondary connections of
         vector <user*> secondary;
+       //creates a new vector to hold all the secondary connections
         for(int i = 0; i < u1.adj.size(); i++){
+           //loops through the adjacent items of the specified user
             for(int x = 0; x < u1.adj[i].u->adj.size(); x++){
+               //loops through the adjcent items of the current adjacent item of the specifed user
                 if(contains(secondary, u1.adj[i].u->adj[x].u->username) == false && contains2(u1.adj, u1.adj[i].u->adj[x].u->username) == false && u1.username != u1.adj[i].u->adj[x].u->username){
                     secondary.push_back(u1.adj[i].u->adj[x].u);
                 }
+               //checks if the current secondary connection is already in the secondary vector, or already a primary connection of the specified user, or the user themselves
+               //if none of these are true, the user is added to the secondary vector
             }
         }
         std::cout << "Connections: " << std::endl;
         for(int i = 0; i < secondary.size(); i++){
             std::cout << secondary[i]->firstName << " " << secondary[i]->lastName << " (" << secondary[i]->username << ")" << std::endl;
         }
+       //for loop ging through each secondary connection and printing out each first and last name and username of the connections
     };
 
     void Graph::getConnectionRecommendations(std::string username){
+       //returns a max of 3 connection recomendation for a specified user
         user u1 = findUser(username);
+       //fins specified user that would like connection recommendations
         vector <user*> secondary;
         for(int i = 0; i < u1.adj.size(); i++){
             for(int x = 0; x < u1.adj[i].u->adj.size(); x++){
@@ -488,7 +519,9 @@ using namespace std;
                 }
             }
         }
+       //finds secondary connections of a user (so that connection recs are users who are connected to a user's connections - already a similar interest)
         vector <user*> recs;
+       //create a new vector to hold the potential user profile connection recomendations
         for(int i = 0; i < secondary.size(); i++){
             int score;
             if(u1.age == secondary[i]->age){
@@ -513,10 +546,12 @@ using namespace std;
                 recs.push_back(secondary[i]);
             }
         }
+       //for loop going through all the secondary connections. checks if each secondary connection has similar profile attributes of the specified user and if they have two or more things in common, they get added to the recs vector
         if(recs.size() == 0){
             std::cout <<"Sorry there are no user recomendations that can be made at this time. " << std::endl;
             return;
         }
+       //checks if the recs vector size is 0, meaning that no one had that many similarities
         if(recs.size() == 1){
             std::cout << recs[0]->firstName << " " << recs[0]->lastName << " (" << recs[0]->username << ")" << std::endl;
             return;
@@ -532,6 +567,7 @@ using namespace std;
             std::cout << recs[2]->firstName << " " << recs[2]->lastName << " (" << recs[2]->username << ")" << std::endl;
             return;
         }
+       //checks if recs size is 3 or less, meaning printing out all the contents in the vector
         int num1 = rand() % recs.size();
         int num2 = rand() % recs.size();
         while(num1 == num2){
@@ -541,14 +577,19 @@ using namespace std;
         while(num3 == num2 || num3 == num1){
             num3 = rand() % recs.size();
         }
+       //if recs size is greater than 3, 3 random numbers are genreated (and garunteed they aren't the same)
         std::cout << recs[num1]->firstName << " " << recs[num1]->lastName << " (" << recs[num1]->username << ")" << std::endl;
         std::cout << recs[num2]->firstName << " " << recs[num2]->lastName << " (" << recs[num2]->username << ")" << std::endl;
         std::cout << recs[num3]->firstName << " " << recs[num3]->lastName << " (" << recs[num3]->username << ")" << std::endl;
+       //the 3 users at the loctions in recs of the random numbers are printed out
     };
 
     void Graph::addPost(std::string username, int month, int day, int year, std::string post){
-        user *u1 = findUser2(username);
+       //adds a new post to a user's profile 
+       user *u1 = findUser2(username);
+       //finds specified user that would like to make a post
         u1->posts->insert(month, day, year, post);
+       //uses Linked List class to insert a post to the user's linked list of posts
     };
 
     bool Graph::checkPostDateUsed(std::string username, int month, int day, int year){
